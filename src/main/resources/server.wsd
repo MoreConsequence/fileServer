@@ -1,0 +1,28 @@
+@startuml
+start
+:初始化;
+repeat :等待客户端连接请求;
+:连接建立;
+repeat while (交由一个线程处理) -> 主线程
+-> 处理线程;
+repeat
+:等待客户端指令;
+fork
+    :put file;
+    if (文件存在) then (yes)
+        :删除文件;
+    endif
+    :保存文件;
+fork again
+    :get file;
+    :传输文件;
+fork again
+    :list files;
+    :获取文件列表信息并传输;
+fork again
+    :exit;
+    :关闭连接;
+    stop
+endfork
+:传输指令结果信息;
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+start
+:与服务器建立连接;
+repeat
+    :等待用户输入命令;
+
+    fork
+        :put file;
+        if (本地文件存在) then (yes)
+            :传输文件;
+        endif
+    fork again
+        :get file;
+        :向服务器请求文件;
+        if (文件长度和摘要正确?) then (yes)
+            :保存文件;
+        endif
+    fork again
+        :list files;
+        :获取文件列表并打印;
+    fork again
+        :exit;
+        :关闭连接;
+        stop
+    endfork
+
+    :打印指令结果信息;
+
+@enduml
