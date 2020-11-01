@@ -1,0 +1,32 @@
+@startuml
+    !include <elastic/common>
+    !include <elastic/elasticsearch/elasticsearch>
+    !include <elastic/logstash/logstash>
+    !include <elastic/kibana/kibana>
+    !include <elastic/beats/beats>
+
+    !include <awslib/AWSCommon>
+    !include <awslib/AWSSimplified.puml>
+    !include <awslib/Compute/all.puml>
+    !include <awslib/mobile/all.puml>
+    !include <awslib/general/all.puml>
+    !include <awslib/GroupIcons/all.puml>
+    !include <office/Servers/application_server>
+
+    Users(Users, "Users", " ")
+    TraditionalServer(SearchServer, "Search Server", " ")
+
+    ELASTICSEARCH(ElasticSearch, "Elasticsearch",database)
+    LOGSTASH(Logstash, "Logstash",node)
+    KIBANA(Kibana, "Kibana",agent) 
+    BEATS(Filebeat, "Filebeat")
+    
+    Filebeat -right-> Logstash
+    Logstash -right-> ElasticSearch: Transformed Data
+    ElasticSearch -right-> Kibana: Data to View
+    ElasticSearch --> SearchServer
+    Users -left-> SearchServer: 复杂查询
+    Users -up-> Kibana: 简单查询
+    ' SearchServer -up-> Kibana
+
+@enduml
